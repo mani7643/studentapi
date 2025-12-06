@@ -1,0 +1,9 @@
+services:
+  app:
+    image: studentdetails:latest
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGODB_URI=${MONGODB_URI}
+    restart: always
