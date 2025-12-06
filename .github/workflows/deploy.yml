@@ -43,5 +43,8 @@ jobs:
             # Build the image manually
             docker build -t studentdetails:latest .
             
+            # Stop old containers to free up ports
+            docker-compose down || true
+            
             # Start containers
             docker-compose up -d
