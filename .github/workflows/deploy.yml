@@ -13,13 +13,16 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Copy docker-compose.yml to Server
+      - name: Create Tarball
+        run: tar -czf app.tar.gz package.json package-lock.json server.js models Dockerfile docker-compose.yml
+
+      - name: Copy Tarball to Server
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "docker-compose.yml,Dockerfile,package.json,package-lock.json,server.js,models"
+          source: "app.tar.gz"
           target: "~/studentdetails"
 
       - name: Deploy Application
@@ -30,8 +33,15 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd ~/studentdetails
+            # Extract valid source code
+            tar -xzf app.tar.gz
+            rm app.tar.gz
+            
+            # Setup env
             echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" > .env
-            # Build the image manually to avoid 'compose build requires buildx' error
+            
+            # Build the image manually
             docker build -t studentdetails:latest .
-            # Start containers (using local image)
+            
+            # Start containers
             docker-compose up -d
