@@ -31,5 +31,7 @@ jobs:
           script: |
             cd ~/studentdetails
             echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" > .env
-            # Build and restart the container
-            docker-compose up -d --build
+            # Build the image manually to avoid 'compose build requires buildx' error
+            docker build -t studentdetails:latest .
+            # Start containers (using local image)
+            docker-compose up -d
