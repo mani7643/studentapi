@@ -53,6 +53,25 @@ app.post('/api/students', async (req, res) => {
     }
 });
 
+app.delete('/api/students/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const deletedStudent = await Student.findByIdAndDelete(id);
+
+        if (!deletedStudent) {
+            return res.status(404).json({ error: "Student not found" });
+        }
+
+        res.json({
+            message: "Student deleted successfully",
+            data: deletedStudent
+        });
+    } catch (error) {
+        res.status(500).json({ error: "Failed to delete student" });
+    }
+});
+
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
