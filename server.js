@@ -54,6 +54,30 @@ app.post('/api/students', async (req, res) => {
     }
 });
 
+app.put('/api/students/:id', async (req, res) => {
+    const { id } = req.params;
+    const { name, age, email, BTech, city } = req.body;
+
+    try {
+        const updatedStudent = await Student.findByIdAndUpdate(
+            id,
+            { name, age, email, BTech, city },
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedStudent) {
+            return res.status(404).json({ error: "Student not found" });
+        }
+
+        res.json({
+            message: "Student updated successfully",
+            data: updatedStudent
+        });
+    } catch (error) {
+        res.status(500).json({ error: "Failed to update student" });
+    }
+});
+
 app.delete('/api/students/:id', async (req, res) => {
     const { id } = req.params;
 
