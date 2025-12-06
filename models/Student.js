@@ -8,10 +8,13 @@ const studentSchema = new mongoose.Schema({
     age: {
         type: Number
     },
-    grade: {
+    email: {
         type: String
     },
-    section: {
+    BTech: {
+        type: String
+    },
+    city: {
         type: String
     },
     createdAt: {

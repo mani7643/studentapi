@@ -27,7 +27,7 @@ app.get('/api/students', async (req, res) => {
 });
 
 app.post('/api/students', async (req, res) => {
-    const { name, age, grade, section } = req.body;
+    const { name, age, email, BTech, city } = req.body;
 
     if (!name) {
         return res.status(400).json({ error: "Student name is required" });
@@ -37,8 +37,9 @@ app.post('/api/students', async (req, res) => {
         const newStudent = new Student({
             name,
             age,
-            grade,
-            section
+            email,
+            BTech,
+            city
         });
 
         const savedStudent = await newStudent.save();
